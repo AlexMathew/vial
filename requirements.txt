@@ -1,0 +1,5 @@
+requests
+ipython
+psycopg2
+docopt
+python-slugify
