@@ -1,18 +1,8 @@
-# An overview of the project
+# Vial
 
-## tl;dr
+Can I build a web app framework using just the in-built `http.server` and without pre-existing ORMs?
 
-* `vial` handles setting up the web app and the database abstractions.
-* `run.py` offers a command line interface to set up tables and start the web server for any given project.
-* The `hellofresh` directory includes the app definition for the Recipes API.
-* The project can be run with `docker-compose up` (it runs at `localhost:8080` but the port can be changed in the `SERVER_PORT` variable in `ops/environment`)
-* Basic tests have been set up, which can be run with `nosetests -v`
-
-## The whole picture
-
-### Vial
-
-The primary goal was abstracting the web server routing and database interactions. Introducing **Vial** [because `flask.__sizeof__()` > `bottle.__sizeof__()` > `vial.__sizeof__()`]
+Introducing **Vial** [because `flask.__sizeof__()` > `bottle.__sizeof__()` > `vial.__sizeof__()`]
 
 You can create applications and define database models that this application will use. These DB models can use of the available DB engines to run the queries on. As of now, only an engine for PostgreSQL has been written. 
 
@@ -39,8 +29,8 @@ Here, `engine` is an object of the `Postgresql` class and `'sample'` is the name
 Once the models have been defined, the next step is creating the application and defining all the routes. The application starts as an object of `Application` from `vial.server.router`. The next step is associating the models for this application (there is no self-discovery set up yet) and that is done using the `define` method. This is necessary for the initial set up - creating tables for the models when a table doesn't already exist. For example,
 
 ```python
-app = Application('hellofresh')
-app.define(models=[User, Recipe]) # User & Recipe are defined in models.py
+app = Application('example')
+app.define(models=[User, Post])
 ```
 
 Routes are defined as decorators for the functions that define the controller. The decorator takes two arguments - the accepted HTTP methods for that view, and a regular expression for the accepted path. If the view takes parameters, the regex can include these parameters - for example, `(?P<user_id>\d+)`. For GET requests that take a query string, that will have to be specified in the regex - `(\?.*)*$`
@@ -75,36 +65,6 @@ As a summary, an application should (at the minimum) look like this -
 |
  - __init__.py
  - app.py
-```
-
-### The Recipes API
-
-With the abstractions to create and define the application set, creating the required API is fairly straightforward. The `hellofresh` module contains the implementation of this API. `models.py` defines the `User` and `Recipe` models. `app.py` defines the application, and all the routes point to the corresponding controllers for the various CRUD operations. The ratings for the recipes are stored in Redis (a helper wrapper is defined in `hellofresh.helpers.redis`). Authentication is implemented using bearer tokens. When a row is created for `User`, a random hash string is stored, which is used as the auth token. An `AuthenticationService` is defined in `hellofresh.services.authentication`, which includes the `is_authenticated_request` decorator, that looks for the bearer token in the `Authorization` header and validates if this is the auth token of a user with maintainer access. 
-
-As an example of something that sums all of this up, the controller to create a new recipe - 
-```python
-@app.route(methods=['POST'], path='/recipes/$')
-@auth.is_authenticated_request
-def create_recipe(request, *args, **kwargs):
-    resp = {
-        "status": 400,
-        "success": False,
-        "message": "",
-    }
-
-    try:
-        body = request.get_post_body()
-        Recipe.insert(**body)
-
-        resp["status"] = 200
-        resp["success"] = True
-        resp["message"] = "Success"
-
-    except Exception as e:
-        resp['message'] = str(e)
-
-    return resp
-
 ```
 
 ### Limitations and future improvements
