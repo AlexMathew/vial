@@ -1,30 +1,35 @@
 #!/usr/bin/env python3
 """
 Usage:
-    run.py (-h | --help | --version)
-    run.py initialize <app>
-    run.py server <app>
+    vial (-h | --help | --version)
+    vial initialize
+    vial server [--host=<host>] [--port=<port>]
 
 Options:
     -h, --help
         Show this help message and exit
     --version, -V
         Display the version of Vial
+    --host=<host>, -H <host>
+        Specifies the host name to run on [default: 127.0.0.1]
+    --port=<port>, -P <port>
+        Specifies the port to run on [default: 8000]
 """
 
 from docopt import docopt
+import ipdb
 
 
-def initialize(app_name):
-    project = __import__(f'{app_name}.app')
+def initialize():
+    project = __import__('app')
     application = getattr(project, 'app')
     application.initialize_db()
 
 
-def server(app_name):
-    project = __import__(f'{app_name}.app')
+def server(host, port):
+    project = __import__('app')
     application = getattr(project, 'app')
-    application.run_server()
+    application.run_server(host=host, port=port)
 
 
 def cli():
@@ -32,12 +37,12 @@ def cli():
 
     try:
         if args['server']:
-            server(args['<app>'])
+            server(host=args['--host'], port=int(args['--port']))
         elif args['initialize']:
-            initialize(args['<app>'])
+            initialize()
 
     except ModuleNotFoundError as e:
-        print("The application you've specified does not exist or hasn't been organized correctly")
+        print("The application does not exist or hasn't been organized correctly")
 
 
 if __name__ == '__main__':

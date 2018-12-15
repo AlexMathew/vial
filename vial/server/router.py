@@ -12,6 +12,7 @@ class Application:
     def __init__(self, app_name, *args, **kwargs):
         self.name = app_name
         self._routes = defaultdict(dict)
+        self.models = []
 
     def __str__(self):
         return f'Application - {self.name}'

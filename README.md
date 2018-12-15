@@ -51,12 +51,22 @@ Vial also includes a CLI to initialize the project (set up the tables) and run t
 
 ```
 Usage:
-    run.py (-h | --help | --version)
-    run.py initialize <app>
-    run.py server <app>
+    vial (-h | --help | --version)
+    vial initialize
+    vial server [--host=<host>] [--port=<port>]
+
+Options:
+    -h, --help
+        Show this help message and exit
+    --version, -V
+        Display the version of Vial
+    --host=<host>, -H <host>
+        Specifies the host name to run on [default: 127.0.0.1]
+    --port=<port>, -P <port>
+        Specifies the port to run on [default: 8000]
 ```
 
-The `<app>` specifies the application to be run. There are requirements to the project structure to make this set up work. The application should live in a module of its own, and should include an `app.py` where the primary bulk of the logic resides. The minimum requirement in `app.py` is that it should define the `initialize_db()` and `run_server()` which is what is called from the CLI commands.
+The app in the current directory is run. There are requirements to the project structure to make this set up work. The application should live in a module of its own, and should include an `app.py` where the primary bulk of the logic resides. 
 
 As a summary, an application should (at the minimum) look like this - 
 
