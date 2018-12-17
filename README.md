@@ -1,5 +1,8 @@
 # Vial
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/4761b904f747f3a500f4/maintainability)](https://codeclimate.com/github/AlexMathew/vial/maintainability)
+[![Build Status](https://travis-ci.com/AlexMathew/vial.svg?branch=master)](https://travis-ci.com/AlexMathew/vial)
+
 Can I build a web app framework using just the in-built `http.server` and without pre-existing ORMs?
 
 Introducing **Vial** [because `flask.__sizeof__()` > `bottle.__sizeof__()` > `vial.__sizeof__()`]
