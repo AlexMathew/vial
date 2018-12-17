@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  application:
+    container_name: example-webserver
+    hostname: example
+    environment:
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=example
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    command: bash -c "pip install -e git+https://github.com/AlexMathew/vial.git#egg=vial ipdb && vial initialize && vial server -H 0.0.0.0 -P 9000"
+    restart: on-failure:5
+    volumes:
+      - .:/code
+    ports:
+      - "9000:9000"
+
+  postgres:
+    image: onjin/alpine-postgres:9.5
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=example
+    volumes:
+      - example-data-postgres:/var/lib/postgresql/data
+
+volumes:
+  example-data-postgres:
