@@ -4,9 +4,6 @@ from .field import BaseField, FieldValidationException
 class Str(BaseField):
     datatype = 'str'
 
-    def __init__(self, *args, **kwargs):
-        super(Str, self).__init__(*args, **kwargs)
-
     def validate(self, value):
         if type(value) is not str:
             raise FieldValidationException("`str` value should be passed")
@@ -15,9 +12,6 @@ class Str(BaseField):
 class Int(BaseField):
     datatype = 'int'
 
-    def __init__(self, *args, **kwargs):
-        super(Int, self).__init__(*args, **kwargs)
-
     def validate(self, value):
         if type(value) is not int:
             raise FieldValidationException("`int` value should be passed")
@@ -25,9 +19,6 @@ class Int(BaseField):
 
 class Float(BaseField):
     datatype = 'float'
-
-    def __init__(self, *args, **kwargs):
-        super(Float, self).__init__(*args, **kwargs)
 
     def validate(self, value):
         from decimal import Decimal
@@ -38,9 +29,6 @@ class Float(BaseField):
 class Bool(BaseField):
     datatype = 'bool'
 
-    def __init__(self, *args, **kwargs):
-        super(Bool, self).__init__(*args, **kwargs)
-
     def validate(self, value):
         if value not in [True, False]:
             raise FieldValidationException("`bool` value should be passed")
@@ -48,9 +36,6 @@ class Bool(BaseField):
 
 class Datetime(BaseField):
     datatype = 'datetime'
-
-    def __init__(self, *args, **kwargs):
-        super(Datetime, self).__init__(*args, **kwargs)
 
     def validate(self, value):
         from datetime import datetime
