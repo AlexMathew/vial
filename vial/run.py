@@ -15,9 +15,11 @@ Options:
     --port=<port>, -P <port>
         Specifies the port to run on [default: 8000]
 """
-
 from docopt import docopt
-import ipdb
+import sys
+import os
+
+sys.path.append(os.getcwd())
 
 
 def initialize():
