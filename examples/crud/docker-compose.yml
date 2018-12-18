@@ -15,7 +15,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
-    command: bash -c "pip install -e git+https://github.com/AlexMathew/vial.git#egg=vial ipdb && vial initialize && vial server -H 0.0.0.0 -P 9000"
+    command: bash -c "vial initialize && vial server -H 0.0.0.0 -P 9000"
     restart: on-failure:5
     volumes:
       - .:/code
