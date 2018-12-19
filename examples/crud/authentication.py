@@ -1,6 +1,6 @@
 from functools import wraps
 
-from .models import User
+from models import User
 
 
 class AuthenticationService:

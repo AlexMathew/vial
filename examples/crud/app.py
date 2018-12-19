@@ -1,3 +1,5 @@
+from hashlib import md5
+
 from vial.server.router import Application
 
 from authentication import AuthenticationService
@@ -11,7 +13,8 @@ auth = AuthenticationService()
 @app.route(methods=['GET'], path='/')
 def home(request, *args, **kwargs):
     return {
-        'message': 'Hello world!'
+        'status': 200,
+        'message': 'Basic CRUD example'
     }
 
 
@@ -138,7 +141,7 @@ def list_product(request, *args, **kwargs):
     return resp
 
 
-@app.route(methods=['GET'], path='/products/(?P<product_code>\d+)/$')
+@app.route(methods=['GET'], path='/products/(?P<product_code>\w+)/$')
 def get_product(request, product_code, *args, **kwargs):
     resp = {
         "status": 400,
@@ -164,7 +167,7 @@ def get_product(request, product_code, *args, **kwargs):
     return resp
 
 
-@app.route(methods=['PUT', 'PATCH'], path='/products/(?P<product_code>\d+)/$')
+@app.route(methods=['PUT', 'PATCH'], path='/products/(?P<product_code>\w+)/$')
 @auth.is_authenticated
 def update_product(request, product_code, *args, **kwargs):
     resp = {
@@ -192,7 +195,7 @@ def update_product(request, product_code, *args, **kwargs):
     return resp
 
 
-@app.route(methods=['DELETE'], path='/products/(?P<product_code>\d+)/$')
+@app.route(methods=['DELETE'], path='/products/(?P<product_code>\w+)/$')
 @auth.is_authenticated
 def delete_product(request, product_code, *args, **kwargs):
     resp = {

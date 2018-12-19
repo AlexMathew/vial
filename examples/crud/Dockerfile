@@ -6,7 +6,6 @@ ENV LANG C.UTF-8
 
 RUN apt-get update -y 
 RUN apt-get install default-libmysqlclient-dev gcc git -y
-RUN pip install pipenv
 
 RUN mkdir /code
 ADD . /code/
