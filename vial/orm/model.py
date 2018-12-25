@@ -83,17 +83,25 @@ class BaseModel:
             db.insert(table_name=cls.get_table_name(), data=values)
 
     @classmethod
+    def dictify_result(cls, fields, data):
+        return {k: v for k, v in zip(fields, data)} if data else {}
+
+    @classmethod
+    def get_fields(cls):
+        fields = []
+        if not any([field['primary'] for field in cls.serialize_attributes().values()]):
+            fields.append('id')
+
+        fields.extend(cls.serialize_attributes().keys())
+
+        return fields
+
+    @classmethod
     def get(cls, where=None):
         with cls._engine as db:
             sel = db.select(table_name=cls.get_table_name(), where=where, limit=1, one=True)
-
-            fields = []
-            if not any([field['primary'] for field in cls.serialize_attributes().values()]):
-                fields.append('id')
-
-            fields.extend(cls.serialize_attributes().keys())
-
-            result = {k: v for k, v in zip(fields, sel)} if sel else {}
+            fields = cls.get_fields()
+            result = cls.dictify_result(fields=fields, data=sel)
 
         return result
 
@@ -101,14 +109,8 @@ class BaseModel:
     def select(cls, where=None, like=None, offset=None, limit=None):
         with cls._engine as db:
             sels = db.select(table_name=cls.get_table_name(), where=where, like=like, offset=offset, limit=limit)
-
-            fields = []
-            if not any([field['primary'] for field in cls.serialize_attributes().values()]):
-                fields.append('id')
-
-            fields.extend(cls.serialize_attributes().keys())
-
-            results = [{k: v for k, v in zip(fields, sel)} for sel in sels]
+            fields = cls.get_fields()
+            results = [cls.dictify_result(fields=fields, data=sel) for sel in sels]
 
         return results
 
@@ -116,14 +118,8 @@ class BaseModel:
     def page(cls, where=None, like=None, number=1, limit=1):
         with cls._engine as db:
             page_data = db.page(table_name=cls.get_table_name(), where=where, like=like, number=number, limit=limit)
-
-            fields = []
-            if not any([field['primary'] for field in cls.serialize_attributes().values()]):
-                fields.append('id')
-
-            fields.extend(cls.serialize_attributes().keys())
-
-            results = [{k: v for k, v in zip(fields, data)} for data in page_data]
+            fields = cls.get_fields()
+            results = [cls.dictify_result(fields=fields, data=data) for data in page_data]
 
         return results
 
