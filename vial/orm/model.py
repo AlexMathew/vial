@@ -57,7 +57,7 @@ class BaseModel:
                 )
 
     @classmethod
-    def insert(cls, **values):
+    def validate_record(cls, **values):
         if not values:
             raise Exception("Values to be inserted should be passed")
 
@@ -74,6 +74,10 @@ class BaseModel:
 
         except FieldValidationException as e:
             raise FieldValidationException(f'{key} - {e}')
+
+    @classmethod
+    def insert(cls, **values):
+        cls.validate_record(**values)
 
         for attr, val in attributes.items():
             if attr not in values:
@@ -125,19 +129,7 @@ class BaseModel:
 
     @classmethod
     def update(cls, where=None, updation=None):
-        attributes = cls.get_attributes()
-
-        try:
-            for key, val in updation.items():
-                if key not in attributes:
-                    raise Exception(f"Not acceptable key - {key}")
-                attributes[key].validate(val)
-                if attributes[key].constraint:
-                    if not attributes[key].constraint(val):
-                        raise FieldConstrainException(f"Constraint failed on key - {key}")
-
-        except FieldValidationException as e:
-            raise FieldValidationException(f'{key} - {e}')
+        cls.validate_record(**updation)
 
         with cls._engine as db:
             db.update(table_name=cls.get_table_name(), where=where, updation=updation)
