@@ -8,6 +8,10 @@ class BaseField:
     def datatype(self):
         pass
 
+    @abc.abstractproperty
+    def accepted_types(self):
+        pass
+
     def __init__(self, primary=False, not_null=False, unique=False, default=None, constraint=None, *args, **kwargs):
         self.primary = primary
         self.not_null = not_null
@@ -29,9 +33,9 @@ class BaseField:
             'unique': self.unique,
         }
 
-    @abc.abstractmethod
-    def validate(self):
-        pass
+    def validate(self, value):
+        if type(value) not in self.accepted_types:
+            raise FieldValidationException(f"Value should be of type {self.accepted_types}")
 
 
 class FieldValidationException(Exception):
