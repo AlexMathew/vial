@@ -63,17 +63,17 @@ class BaseModel:
 
         attributes = cls.get_attributes()
 
-        try:
-            for key, val in values.items():
-                if key not in attributes:
-                    raise Exception(f"Not acceptable key - {key}")
-                attributes[key].validate(val)
-                if attributes[key].constraint:
-                    if not attributes[key].constraint(val):
-                        raise FieldConstrainException(f"Constraint failed on key - {key}")
+        for key, val in values.items():
+            if key not in attributes:
+                raise Exception(f"Not acceptable key - {key}")
 
-        except FieldValidationException as e:
-            raise FieldValidationException(f'{key} - {e}')
+            try:
+                attributes[key].validate(val)
+            except FieldValidationException as e:
+                raise FieldValidationException(f'{key} - {e}')
+
+            if attributes[key].constraint and not attributes[key].constraint(val):
+                raise FieldConstrainException(f"Constraint failed on key - {key}")
 
     @classmethod
     def insert(cls, **values):
