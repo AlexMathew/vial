@@ -78,6 +78,7 @@ class BaseModel:
     @classmethod
     def insert(cls, **values):
         cls.validate_record(**values)
+        attributes = cls.get_attributes()
 
         for attr, val in attributes.items():
             if attr not in values:
