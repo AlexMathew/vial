@@ -42,6 +42,9 @@ For example, to create a user model -
 
 .. code:: python
 
+   from vial.orm import types
+   from vial.orm.model import BaseModel
+
    class User(BaseModel):
        _engine = engine
        _application_name = 'sample'
@@ -50,7 +53,7 @@ For example, to create a user model -
        password = types.Str(not_null=True)
        active = types.Bool(default=True)
        created_date = types.Datetime(default=datetime.now)
-       job_level = type.Int(constraint=lambda x: x in [1, 2, 3])
+       job_level = types.Int(constraint=lambda x: x in [1, 2, 3])
 
 Here, ``engine`` is an object of the ``Postgresql`` class and
 ``'sample'`` is the name of the application (the created table will be
