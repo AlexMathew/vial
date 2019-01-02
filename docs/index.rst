@@ -65,7 +65,7 @@ object of ``Application`` from ``vial.server.router``. The next step is
 associating the models for this application (there is no self-discovery
 set up yet) and that is done using the ``define`` method. This is
 necessary for the initial set up - creating tables for the models when a
-table doesn't already exist. For example,
+table doesn’t already exist. For example,
 
 .. code:: python
 
@@ -73,13 +73,76 @@ table doesn't already exist. For example,
    app.define(models=[User, Post])
 
 Routes are defined as decorators for the functions that define the
-controller. The decorator takes two arguments - the accepted
+controller. The decorator takes two arguments - the accepted HTTP
+methods for that view, and a regular expression for the accepted path.
+If the view takes parameters, the regex can include these parameters -
+for example, ``(?P<user_id>\d+)``. For GET requests that take a query
+string, that will have to be specified in the regex - ``(\?.*)*$``
+
+An example view would look like this.
+
+.. code:: python
+
+   @app.route(methods=['GET'], path='/')
+   def home(request, *args, **kwargs):
+       return {
+           'message': 'Hello world!'
+       }
+
+The running web server uses ``Handler`` from ``vial.server.handler`` as
+its request handler (derived from ``BaseHTTPRequestHandler``) and this
+handles all of the incoming HTTP requests. The ``handle_http()`` method
+validates the path of the request and runs the corresponding controller.
+This class also includes ``get_post_body()`` and ``get_query_string()``
+which can be used in POST and GET requests, respectively.
+
+Vial also includes a CLI to initialize the project (set up the tables)
+and run the web server.
+
+.. code:: bash
+
+   Usage:
+       vial (-h | --help | --version)
+       vial initialize
+       vial server [--host=<host>] [--port=<port>]
+
+   Options:
+       -h, --help
+           Show this help message and exit
+       --version, -V
+           Display the version of Vial
+       --host=<host>, -H <host>
+           Specifies the host name to run on [default: 127.0.0.1]
+       --port=<port>, -P <port>
+           Specifies the port to run on [default: 8000]
+
+The app in the current directory is run. There are requirements to the
+project structure to make this set up work. The application should live
+in a module of its own, and should include an ``app.py`` where the
+primary bulk of the logic resides.
+
+As a summary, an application should (at the minimum) look like this -
+
+.. code:: bash
+
+   - sample
+   |
+    - __init__.py
+    - app.py
+
+Limitations and future improvements
+-----------------------------------
+
+-  Joins have to be implemented, right from the DB engine level.
+-  No provision to define foreign keys.
+-  Cleaner regular expressions to define the routes, especially the GET
+   query string case.
+-  No ability for handling DB migrations.
 
 .. |Maintainability| image:: https://api.codeclimate.com/v1/badges/4761b904f747f3a500f4/maintainability
    :target: https://codeclimate.com/github/AlexMathew/vial/maintainability
 .. |Build Status| image:: https://travis-ci.com/AlexMathew/vial.svg?branch=master
    :target: https://travis-ci.com/AlexMathew/vial
-
 
 .. toctree::
    :maxdepth: 2

@@ -7,13 +7,13 @@ Can I build a web app framework using just the in-built `http.server` and withou
 
 Introducing **Vial** [because `flask.__sizeof__()` > `bottle.__sizeof__()` > `vial.__sizeof__()`]
 
-You can create applications and define database models that this application will use. These DB models can use of the available DB engines to run the queries on. As of now, only an engine for PostgreSQL has been written. 
+You can create applications and define database models that this application will use. These DB models can use of the available DB engines to run the queries on. As of now, only an engine for PostgreSQL has been written.
 
-DB engines are organized under `vial/db` and are classes derived from the `Engine` class in `vial.db.base`. They define functionality for the primary operations - creating a new table and basic CRUD operations - though it can later be extended to define more complex operations, like altering the table and operations involving joins. 
+DB engines are organized under `vial/db` and are classes derived from the `Engine` class in `vial.db.base`. They define functionality for the primary operations - creating a new table and basic CRUD operations - though it can later be extended to define more complex operations, like altering the table and operations involving joins.
 
 The base definition of a model (`BaseModel` in `vial.orm.model`) includes functionality for CRUD operations and pagination, which is run on top of the DB engine specified. The base definition of field (`BaseField` in `vial.orm.field`) includes basic serialization, which is used when creating the tables. The different field types are defined in `vial.orm.types` - they currently include strings, integers, floats, booleans and datetime objects. While creating a field in a model, you can also specify a default value (either as a plain value or a callable function) and a constraint validator (as a lambda function that takes as input the value that is to be in that field, and returns True or False). If no primary key is defined, a serial incrementing ID is used as primary key.
 
-For example, to create a user model - 
+For example, to create a user model -
 
 ```python
 from vial.orm import types
@@ -53,9 +53,9 @@ def home(request, *args, **kwargs):
 
 The running web server uses `Handler` from `vial.server.handler` as its request handler (derived from `BaseHTTPRequestHandler`) and this handles all of the incoming HTTP requests. The `handle_http()` method validates the path of the request and runs the corresponding controller. This class also includes `get_post_body()` and `get_query_string()` which can be used in POST and GET requests, respectively.
 
-Vial also includes a CLI to initialize the project (set up the tables) and run the web server. 
+Vial also includes a CLI to initialize the project (set up the tables) and run the web server.
 
-```
+```bash
 Usage:
     vial (-h | --help | --version)
     vial initialize
@@ -72,18 +72,18 @@ Options:
         Specifies the port to run on [default: 8000]
 ```
 
-The app in the current directory is run. There are requirements to the project structure to make this set up work. The application should live in a module of its own, and should include an `app.py` where the primary bulk of the logic resides. 
+The app in the current directory is run. There are requirements to the project structure to make this set up work. The application should live in a module of its own, and should include an `app.py` where the primary bulk of the logic resides.
 
-As a summary, an application should (at the minimum) look like this - 
+As a summary, an application should (at the minimum) look like this -
 
-```
+```bash
 - sample
 |
  - __init__.py
  - app.py
 ```
 
-### Limitations and future improvements
+## Limitations and future improvements
 
 * Joins have to be implemented, right from the DB engine level.
 * No provision to define foreign keys.
