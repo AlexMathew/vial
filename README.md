@@ -20,8 +20,6 @@ from vial.orm import types
 from vial.orm.model import BaseModel
 
 class User(BaseModel):
-    _engine = engine
-
     email = types.Str(not_null=True, unique=True)
     password = types.Str(not_null=True)
     active = types.Bool(default=True)
@@ -29,14 +27,14 @@ class User(BaseModel):
     job_level = types.Int(constraint=lambda x: x in [1, 2, 3])
 ```
 
-Here, `engine` is an object of the `Postgresql` class and `'sample'` is the name of the application (the created table will be `sample_user`)
-
 Once the models have been defined, the next step is creating the application and defining all the routes. The application starts as an object of `Application` from `vial.server.router`. The next step is associating the models for this application (there is no self-discovery set up yet) and that is done using the `define` method. This is necessary for the initial set up - creating tables for the models when a table doesn't already exist. For example,
 
 ```python
 app = Application('example')
-app.define(models=[User, Post])
+app.define(models=[User, Post], engine=engine)
 ```
+
+Here, `engine` is an object of the `Postgresql` class and `'example'` is the name of the application (the created tables after set up will be `example_user` and `example_post`)
 
 Routes are defined as decorators for the functions that define the controller. The decorator takes two arguments - the accepted HTTP methods for that view, and a regular expression for the accepted path. If the view takes parameters, the regex can include these parameters - for example, `(?P<user_id>\d+)`. For GET requests that take a query string, that will have to be specified in the regex - `(\?.*)*$`
 

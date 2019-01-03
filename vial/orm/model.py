@@ -9,9 +9,9 @@ class BaseModel:
     __metaclass__ = abc.ABCMeta
     _application = None
 
-    @abc.abstractproperty
-    def _engine(self):
-        pass
+    @classmethod
+    def use_engine(cls, engine):
+        cls._engine = engine
 
     @classmethod
     def add_application_instance(cls, application):

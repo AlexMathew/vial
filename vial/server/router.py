@@ -20,9 +20,13 @@ class Application:
     def __repr__(self):
         return f'Application - {self.name}'
 
-    def define(self, models=None, *args, **kwargs):
+    def define(self, models=None, engine=None, *args, **kwargs):
+        if not engine:
+            raise Exception("DB engine to be used should be specified")
+
         for model in models:
             model.add_application_instance(self)
+            model.use_engine(engine)
             self.models.append(model)
 
     def route(self, methods, path):
