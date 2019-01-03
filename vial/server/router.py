@@ -21,7 +21,9 @@ class Application:
         return f'Application - {self.name}'
 
     def define(self, models=None, *args, **kwargs):
-        self.models = models
+        for model in models:
+            model.add_application_instance(self)
+            self.models.append(model)
 
     def route(self, methods, path):
         def decorator(func):

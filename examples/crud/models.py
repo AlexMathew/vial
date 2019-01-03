@@ -23,7 +23,6 @@ def create_auth_token():
 
 class User(BaseModel):
     _engine = engine
-    _application_name = 'crud_example'
 
     email = types.Str(not_null=True, unique=True)
     password = types.Str(not_null=True)
@@ -39,7 +38,6 @@ class CategoryChoices(enum.Enum):
 
 class Product(BaseModel):
     _engine = engine
-    _application_name = 'crud_example'
 
     code = types.Str(not_null=True, primary=True)
     name = types.Str(not_null=True)
