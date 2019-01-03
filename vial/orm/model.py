@@ -7,18 +7,19 @@ from .field import FieldConstrainException, FieldValidationException
 
 class BaseModel:
     __metaclass__ = abc.ABCMeta
+    _application = None
 
     @abc.abstractproperty
     def _engine(self):
         pass
 
-    @abc.abstractproperty
-    def _application_name(self):
-        pass
+    @classmethod
+    def add_application_instance(cls, application):
+        cls._application = application
 
     @classmethod
     def get_table_name(cls):
-        return slugify(f'{cls._application_name}_{cls.__name__}').replace('-', '_')
+        return slugify(f'{cls._application.name}_{cls.__name__}').replace('-', '_')
 
     def __init__(self, *args, **kwargs):
         pass

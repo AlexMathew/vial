@@ -47,7 +47,6 @@ For example, to create a user model -
 
    class User(BaseModel):
        _engine = engine
-       _application_name = 'sample'
 
        email = types.Str(not_null=True, unique=True)
        password = types.Str(not_null=True)
