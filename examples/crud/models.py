@@ -4,17 +4,8 @@ from datetime import datetime
 from hashlib import md5
 from random import random
 
-from vial.db.postgresql import Postgresql
 from vial.orm import types
 from vial.orm.model import BaseModel
-
-engine = Postgresql(
-    dbname=os.getenv('POSTGRES_DATABASE'),
-    user=os.getenv('POSTGRES_USER'),
-    password=os.getenv('POSTGRES_PASSWORD'),
-    host=os.getenv('POSTGRES_HOST'),
-    port=os.getenv('POSTGRES_PORT')
-)
 
 
 def create_auth_token():
@@ -22,8 +13,6 @@ def create_auth_token():
 
 
 class User(BaseModel):
-    _engine = engine
-
     email = types.Str(not_null=True, unique=True)
     password = types.Str(not_null=True)
     maintainer = types.Bool(default=False)
@@ -37,8 +26,6 @@ class CategoryChoices(enum.Enum):
 
 
 class Product(BaseModel):
-    _engine = engine
-
     code = types.Str(not_null=True, primary=True)
     name = types.Str(not_null=True)
     description = types.Str()

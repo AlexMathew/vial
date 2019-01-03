@@ -1,12 +1,22 @@
 from hashlib import md5
 
+from vial.db.postgresql import Postgresql
 from vial.server.router import Application
 
 from authentication import AuthenticationService
 from models import User, Product
 
+engine = Postgresql(
+    dbname=os.getenv('POSTGRES_DATABASE'),
+    user=os.getenv('POSTGRES_USER'),
+    password=os.getenv('POSTGRES_PASSWORD'),
+    host=os.getenv('POSTGRES_HOST'),
+    port=os.getenv('POSTGRES_PORT')
+)
+
 app = Application('crud_example')
-app.define(models=[User, Product])
+app.define(models=[User, Product], engine=engine)
+
 auth = AuthenticationService()
 
 
