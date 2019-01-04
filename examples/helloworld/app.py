@@ -1,4 +1,4 @@
-from vial.server.router import Application
+from vial.server.application import Application
 
 app = Application('helloworld')
 

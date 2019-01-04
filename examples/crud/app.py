@@ -1,7 +1,7 @@
 from hashlib import md5
 
 from vial.db.postgresql import Postgresql
-from vial.server.router import Application
+from vial.server.application import Application
 
 from authentication import AuthenticationService
 from models import User, Product
