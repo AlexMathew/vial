@@ -1,5 +1,4 @@
 from nose.tools import assert_equal, assert_in
-
 from vial.db.postgresql import Postgresql
 
 pg = Postgresql(dbname='', user='', password='', host='', port='')
