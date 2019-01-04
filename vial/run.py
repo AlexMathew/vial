@@ -15,9 +15,10 @@ Options:
     --port=<port>, -P <port>
         Specifies the port to run on [default: 8000]
 """
-from docopt import docopt
-import sys
 import os
+import sys
+
+from docopt import docopt
 
 sys.path.append(os.getcwd())
 

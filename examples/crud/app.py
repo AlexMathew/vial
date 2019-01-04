@@ -1,10 +1,9 @@
 from hashlib import md5
 
+from authentication import AuthenticationService
+from models import Product, User
 from vial.db.postgresql import Postgresql
 from vial.server.application import Application
-
-from authentication import AuthenticationService
-from models import User, Product
 
 engine = Postgresql(
     dbname=os.getenv('POSTGRES_DATABASE'),

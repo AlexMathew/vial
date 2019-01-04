@@ -1,7 +1,6 @@
 from nose import with_setup
 from nose.tools import (assert_equal, assert_in, assert_is_none,
                         assert_is_not_none)
-
 from vial.server.application import Application
 
 app = Application('test_runner')
