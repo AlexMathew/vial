@@ -65,6 +65,7 @@ class Postgresql(Engine):
         return results
 
     def _create_query(self, table_name, serial=False, fields=None):
+        fields = fields or {}
         query = ' '.join(f"""
         CREATE TABLE {table_name}
         ( {'id SERIAL PRIMARY KEY' if serial else ''}
