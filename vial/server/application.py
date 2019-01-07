@@ -50,8 +50,8 @@ class Application:
     def validate_route(self, command, path):
         routes = defaultdict(list)
         for method, route in self._routes.items():
-            for route, function in route.items():
-                routes[route].append(method)
+            for r in route.keys():
+                routes[r].append(method)
 
         acceptable_methods = []
         for route, methods in routes.items():

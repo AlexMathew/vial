@@ -64,7 +64,8 @@ class Postgresql(Engine):
         cur.close()
         return results
 
-    def _create_query(self, table_name, serial=False, fields={}):
+    def _create_query(self, table_name, serial=False, fields=None):
+        fields = fields or {}
         query = ' '.join(f"""
         CREATE TABLE {table_name}
         ( {'id SERIAL PRIMARY KEY' if serial else ''}
@@ -79,12 +80,12 @@ class Postgresql(Engine):
         """.split())
         return query
 
-    def create(self, table_name, serial=False, fields={}):
+    def create(self, table_name, serial=False, fields=None):
         cur = self._conn.cursor()
         cur.execute(self._create_query(
             table_name=table_name,
             serial=serial,
-            fields=fields,
+            fields=fields or {},
         ))
         self._conn.commit()
         cur.close()
@@ -111,7 +112,7 @@ class Postgresql(Engine):
 
         query = ' '.join(f"""
         SELECT {', '.join(fields) if fields else '*'} FROM {table_name}
-        {f' WHERE {" AND ".join([f"{k}={v if type(v) in [int, float, bool] else stringify(v)}" for k, v in where.items()])}' if where else ''}
+        {f' WHERE {" AND ".join([f"{k}={v if isinstance(v, (int, float, bool)) else stringify(v)}" for k, v in where.items()])}' if where else ''}
         {f' {"AND" if where else "WHERE"} {" AND ".join([f"{k} ILIKE {stringify(v, like=True)}" for k, v in like.items()])}' if like else ''}
         {f' OFFSET {offset}' if offset else ''}
         {f' LIMIT {limit}' if limit else ''};

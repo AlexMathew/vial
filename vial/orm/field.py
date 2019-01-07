@@ -34,15 +34,15 @@ class BaseField:
         }
 
     def validate(self, value):
-        if type(value) not in self.accepted_types:
+        if isinstance(value, tuple(self.accepted_types)):
             raise FieldValidationException(f"Value should be of type {self.accepted_types}")
 
 
 class FieldValidationException(Exception):
     def __init__(self, *args, **kwargs):
-        super(Exception, self).__init__(*args, **kwargs)
+        super(FieldValidationException, self).__init__(*args, **kwargs)
 
 
 class FieldConstrainException(Exception):
     def __init__(self, *args, **kwargs):
-        super(Exception, self).__init__(*args, **kwargs)
+        super(FieldConstrainException, self).__init__(*args, **kwargs)
