@@ -1,5 +1,6 @@
 # Vial
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7583124ac88f42e3b12ea95c0b797df0)](https://app.codacy.com/app/AlexMathew/vial?utm_source=github.com&utm_medium=referral&utm_content=AlexMathew/vial&utm_campaign=Badge_Grade_Settings)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4761b904f747f3a500f4/maintainability)](https://codeclimate.com/github/AlexMathew/vial/maintainability)
 [![Build Status](https://travis-ci.com/AlexMathew/vial.svg?branch=master)](https://travis-ci.com/AlexMathew/vial)
 
