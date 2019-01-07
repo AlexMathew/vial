@@ -5,10 +5,10 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 RUN apt-get update -y 
-RUN apt-get install default-libmysqlclient-dev gcc git -y
+RUN apt-get install default-libmysqlclient-dev gcc git -y --no-install-recommends
 
 RUN mkdir /code
-ADD . /code/
+COPY . /code/
 WORKDIR /code
 
 RUN pip install -e git+https://github.com/AlexMathew/vial.git#egg=vial

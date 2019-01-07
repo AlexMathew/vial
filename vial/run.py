@@ -44,7 +44,7 @@ def cli():
         elif args['initialize']:
             initialize()
 
-    except ModuleNotFoundError as e:
+    except ModuleNotFoundError:
         print("The application does not exist or hasn't been organized correctly")
 
 

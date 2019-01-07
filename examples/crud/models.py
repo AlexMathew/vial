@@ -1,7 +1,6 @@
 import enum
-import os
 from datetime import datetime
-from hashlib import md5
+from hashlib import sha256
 from random import random
 
 from vial.orm import types
@@ -9,7 +8,7 @@ from vial.orm.model import BaseModel
 
 
 def create_auth_token():
-    return md5(str(random()).encode('utf-8')).hexdigest()
+    return sha256(str(random()).encode('utf-8')).hexdigest()
 
 
 class User(BaseModel):

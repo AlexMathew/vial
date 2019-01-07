@@ -1,4 +1,5 @@
-from hashlib import md5
+from hashlib import sha256
+import os
 
 from authentication import AuthenticationService
 from models import Product, User
@@ -15,8 +16,6 @@ engine = Postgresql(
 
 app = Application('crud_example')
 app.define(models=[User, Product], engine=engine)
-
-auth = AuthenticationService()
 
 
 @app.route(methods=['GET'], path='/')
@@ -45,7 +44,7 @@ def signup(request, *args, **kwargs):
 
         User.insert(
             email=body.get('email'),
-            password=md5(body.get('password').encode('utf-8')).hexdigest(),
+            password=sha256(body.get('password').encode('utf-8')).hexdigest(),
             maintainer=body.get('maintainer') or False,
         )
 
@@ -78,7 +77,7 @@ def login(request, *args, **kwargs):
         if not user:
             raise Exception('No user with this email exists')
 
-        if user.get('password') == md5(body.get('password').encode('utf-8')).hexdigest():
+        if user.get('password') == sha256(body.get('password').encode('utf-8')).hexdigest():
             resp["user"] = {
                 "id": user.get('id', ''),
                 "email": user.get('email', ''),
@@ -101,7 +100,7 @@ def login(request, *args, **kwargs):
 
 
 @app.route(methods=['POST'], path='/products/$')
-@auth.is_authenticated
+@AuthenticationService.is_authenticated
 def create_product(request, *args, **kwargs):
     resp = {
         "status": 400,
@@ -177,7 +176,7 @@ def get_product(request, product_code, *args, **kwargs):
 
 
 @app.route(methods=['PUT', 'PATCH'], path='/products/(?P<product_code>\w+)/$')
-@auth.is_authenticated
+@AuthenticationService.is_authenticated
 def update_product(request, product_code, *args, **kwargs):
     resp = {
         "status": 400,
@@ -205,7 +204,7 @@ def update_product(request, product_code, *args, **kwargs):
 
 
 @app.route(methods=['DELETE'], path='/products/(?P<product_code>\w+)/$')
-@auth.is_authenticated
+@AuthenticationService.is_authenticated
 def delete_product(request, product_code, *args, **kwargs):
     resp = {
         "status": 400,
