@@ -28,9 +28,11 @@ class User(BaseModel):
     job_level = types.Int(constraint=lambda x: x in [1, 2, 3])
 ```
 
-Once the models have been defined, the next step is creating the application and defining all the routes. The application starts as an object of `Application` from `vial.server.router`. The next step is associating the models for this application (there is no self-discovery set up yet) and that is done using the `define` method. This is necessary for the initial set up - creating tables for the models when a table doesn't already exist. For example,
+Once the models have been defined, the next step is creating the application and defining all the routes. The application starts as an object of `Application` from `vial.server.application`. The next step is associating the models for this application (there is no self-discovery set up yet) and that is done using the `define` method. This is necessary for the initial set up - creating tables for the models when a table doesn't already exist. For example,
 
 ```python
+from vial.server.application import Application
+
 app = Application('example')
 app.define(models=[User, Post], engine=engine)
 ```
