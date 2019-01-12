@@ -122,7 +122,7 @@ def create_product(request, *args, **kwargs):
     return resp
 
 
-@app.route(methods=['GET'], path='/products/(\?.*)*$')
+@app.route(methods=['GET'], path='/products/<qs>$')
 def list_product(request, *args, **kwargs):
     resp = {
         "status": 400,
