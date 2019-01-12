@@ -9,6 +9,10 @@ from .handler import Handler
 class Application:
     """
     """
+    URL_COMPONENT_MAPPER = {
+        "<qs>": "(\?.*)+",
+    }
+
     def __init__(self, app_name, *args, **kwargs):
         self.name = app_name
         self._routes = defaultdict(dict)
@@ -30,6 +34,9 @@ class Application:
             self.models.append(model)
 
     def route(self, methods, path):
+        for helper, mapping in Application.URL_COMPONENT_MAPPER.items():
+            path = path.replace(helper, mapping)
+
         def decorator(func):
             for method in methods:
                 self._routes[method.lower()][path] = func

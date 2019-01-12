@@ -39,15 +39,23 @@ app.define(models=[User, Post], engine=engine)
 
 Here, `engine` is an object of the `Postgresql` class and `'example'` is the name of the application (the created tables after set up will be `example_user` and `example_post`)
 
-Routes are defined as decorators for the functions that define the controller. The decorator takes two arguments - the accepted HTTP methods for that view, and a regular expression for the accepted path. If the view takes parameters, the regex can include these parameters - for example, `(?P<user_id>\d+)`. For GET requests that take a query string, that will have to be specified in the regex - `(\?.*)*$`
+Routes are defined as decorators for the functions that define the controller. The decorator takes two arguments - the accepted HTTP methods for that view, and a regular expression for the accepted path. Like any regular expression, the `^` denotes the start of the string and the `$` denotes the end of the string. If the view takes parameters, the regex can include these parameters - for example, `(?P<user_id>\d+)`. There are helpers available for common URL features. For example, for GET requests that take a query string, you can specify `<qs>` for the query string.
 
 An example view would look like this.
 
 ```python
-@app.route(methods=['GET'], path='/')
+@app.route(methods=['GET'], path='/$')
 def home(request, *args, **kwargs):
     return {
         'message': 'Hello world!'
+    }
+
+@app.route(methods=['GET'], path='/<qs>$')
+def query(request, *args, **kwargs):
+    qs = request.get_query_string()
+
+    return {
+        'query': qs
     }
 ```
 
