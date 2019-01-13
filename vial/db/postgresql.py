@@ -49,7 +49,8 @@ class Postgresql(Engine):
 
         self._conn.close()
 
-    def _tables_query(self):
+    @classmethod
+    def _tables_query(cls):
         query = ' '.join(f"""
         SELECT table_name FROM information_schema.tables
         WHERE table_schema = 'public'
@@ -58,13 +59,14 @@ class Postgresql(Engine):
 
     def list_tables(self):
         cur = self._conn.cursor()
-        cur.execute(self._tables_query())
+        cur.execute(Postgresql._tables_query())
         results = [x[0] for x in cur.fetchall()]
         self._conn.commit()
         cur.close()
         return results
 
-    def _create_query(self, table_name, serial=False, fields=None):
+    @classmethod
+    def _create_query(cls, table_name, serial=False, fields=None):
         fields = fields or {}
         query = ' '.join(f"""
         CREATE TABLE {table_name}
@@ -82,7 +84,7 @@ class Postgresql(Engine):
 
     def create(self, table_name, serial=False, fields=None):
         cur = self._conn.cursor()
-        cur.execute(self._create_query(
+        cur.execute(Postgresql._create_query(
             table_name=table_name,
             serial=serial,
             fields=fields or {},
@@ -90,7 +92,8 @@ class Postgresql(Engine):
         self._conn.commit()
         cur.close()
 
-    def _insert_query(self, table_name, fields=None):
+    @classmethod
+    def _insert_query(cls, table_name, fields=None):
         query = ' '.join(f"""
         INSERT INTO {table_name} ({', '.join(fields)})
         VALUES ({', '.join(["%s" for _ in fields])})
@@ -99,12 +102,13 @@ class Postgresql(Engine):
 
     def insert(self, table_name, data=None):
         cur = self._conn.cursor()
-        cur.execute(self._insert_query(table_name, fields=data.keys()), tuple(data.values()))
+        cur.execute(Postgresql._insert_query(table_name, fields=data.keys()), tuple(data.values()))
         self._conn.commit()
         cur.close()
         return True
 
-    def _select_query(self, table_name, fields=None, where=None, like=None, offset=None, limit=None):
+    @classmethod
+    def _select_query(cls, table_name, fields=None, where=None, like=None, offset=None, limit=None):
         def stringify(v, like=False):
             if like:
                 return f"'%{v}%'"
@@ -121,7 +125,7 @@ class Postgresql(Engine):
 
     def select(self, table_name, fields=None, where=None, like=None, offset=None, limit=None, one=False):
         cur = self._conn.cursor()
-        cur.execute(self._select_query(
+        cur.execute(Postgresql._select_query(
             table_name=table_name,
             fields=fields,
             where=where,
@@ -134,7 +138,8 @@ class Postgresql(Engine):
         cur.close()
         return result
 
-    def _update_query(self, table_name, where=None, updation=None):
+    @classmethod
+    def _update_query(cls, table_name, where=None, updation=None):
         query = ' '.join(f"""
         UPDATE {table_name}
         {f' SET {", ".join([f"{k}=(%s)" for k in updation.keys()])}' if updation else ''}
@@ -144,14 +149,15 @@ class Postgresql(Engine):
 
     def update(self, table_name, where=None, updation=None):
         cur = self._conn.cursor()
-        cur.execute(self._update_query(
+        cur.execute(Postgresql._update_query(
             table_name, where=where, updation=updation
         ), (tuple(updation.values()), tuple(where.values())))
         self._conn.commit()
         cur.close()
         return True
 
-    def _delete_query(self, table_name, where=None):
+    @classmethod
+    def _delete_query(cls, table_name, where=None):
         query = ' '.join(f"""
         DELETE FROM {table_name}
         {f' WHERE {" AND ".join([f"{k}=(%s)" for k in where.keys()])}' if where else ''}
@@ -160,7 +166,7 @@ class Postgresql(Engine):
 
     def delete(self, table_name, where=None):
         cur = self._conn.cursor()
-        cur.execute(self._delete_query(table_name, where=where), tuple(where.values()))
+        cur.execute(Postgresql._delete_query(table_name, where=where), tuple(where.values()))
         self._conn.commit()
         cur.close()
         return True
