@@ -38,3 +38,18 @@ class Sqlite(Engine):
             self._conn.rollback()
 
         self._conn.close()
+
+    @classmethod
+    def _tables_query(cls):
+        query = ' '.join(f"""
+        SELECT name FROM sqlite_master WHERE type='table'
+        """.split())
+        return query
+
+    def list_tables(self):
+        cur = self._conn.cursor()
+        cur.execute(Sqlite._tables_query())
+        results = [x[0] for x in cur.fetchall()]
+        self._conn.commit()
+        cur.close()
+        return results
