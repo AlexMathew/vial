@@ -3,7 +3,7 @@ import os
 
 from authentication import AuthenticationService
 from models import Product, User
-from vial.db.postgresql import Postgresql
+from vial.db.sql.postgresql import Postgresql
 from vial.server.application import Application
 
 engine = Postgresql(

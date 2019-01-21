@@ -1,5 +1,5 @@
 from nose.tools import assert_in
-from vial.db.postgresql import Postgresql
+from vial.db.sql.postgresql import Postgresql
 
 
 def test_create():
