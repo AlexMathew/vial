@@ -3,18 +3,9 @@ import os
 
 from authentication import AuthenticationService
 from models import Product, User
-from vial.db.sql.postgresql import Postgresql
-from vial.server.application import Application
 
-engine = Postgresql(
-    dbname=os.getenv('POSTGRES_DATABASE'),
-    user=os.getenv('POSTGRES_USER'),
-    password=os.getenv('POSTGRES_PASSWORD'),
-    host=os.getenv('POSTGRES_HOST'),
-    port=os.getenv('POSTGRES_PORT')
-)
+from definition import app, engine
 
-app = Application('crud_example')
 app.define(models=[User, Product], engine=engine)
 
 
