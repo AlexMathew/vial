@@ -28,6 +28,8 @@ class Application:
         if not engine:
             raise Exception("DB engine to be used should be specified")
 
+        models = models or []
+
         for model in models:
             model.add_application_instance(self)
             model.use_engine(engine)
