@@ -1,4 +1,6 @@
-from definition import app
+from definition import app, engine
+
+app.define(models=[], engine=engine)
 
 
 @app.route(methods=['GET'], path='/$')
