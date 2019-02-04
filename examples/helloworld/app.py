@@ -1,6 +1,6 @@
-from vial.server.application import Application
+from definition import app, engine
 
-app = Application('helloworld')
+app.define(models=[], engine=engine)
 
 
 @app.route(methods=['GET'], path='/$')
