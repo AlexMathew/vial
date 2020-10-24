@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7583124ac88f42e3b12ea95c0b797df0)](https://app.codacy.com/app/AlexMathew/vial?utm_source=github.com&utm_medium=referral&utm_content=AlexMathew/vial&utm_campaign=Badge_Grade_Settings)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4761b904f747f3a500f4/maintainability)](https://codeclimate.com/github/AlexMathew/vial/maintainability)
 [![Build Status](https://travis-ci.com/AlexMathew/vial.svg?branch=master)](https://travis-ci.com/AlexMathew/vial)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAlexMathew%2Fvial.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FAlexMathew%2Fvial?ref=badge_shield)
 
 Can I build a web app framework using just the in-built `http.server` and without pre-existing ORMs?
 
@@ -97,3 +98,7 @@ As a summary, an application should (at the minimum) look like this -
 * No provision to define foreign keys.
 * Cleaner regular expressions to define the routes, especially the GET query string case.
 * No ability for handling DB migrations.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAlexMathew%2Fvial.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FAlexMathew%2Fvial?ref=badge_large)
