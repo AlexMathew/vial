@@ -3,3 +3,4 @@ ipython
 psycopg2
 docopt
 python-slugify
+pygments>=2.7.4 # not directly required, pinned by Snyk to avoid a vulnerability
